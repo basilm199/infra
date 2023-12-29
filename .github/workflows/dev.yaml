@@ -8,8 +8,8 @@ on:
   push:
     branches:
       - developement
-      - 'feature/**'
-    
+      - 'feature/*'
+        
 jobs:
     
   build:
@@ -33,26 +33,22 @@ jobs:
             -backend-config="key=terraform.tfstate" \
             -backend-config="region=us-west-1" \
             -backend-config="access_key=${{ secrets.DEV_ACCESS }}" \
-            -backend-config="secret_key=${{ secrets.DEV_SECRET }}" \
+           -backend-config="secret_key=${{ secrets.DEV_SECRET }}" \
+
 
       - name: Terraform fmt
         run: terraform fmt
 
-        
-          
       - name: Terraform validate
         run: terraform validate
-
-        
 
       - name: Terraform plan
         run: terraform plan -var-file=dev.tfvars
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET }}
-          AWS_REGION: "us-east-2"
-        
-        
+          AWS_REGION: "eu-north-1"
+                
       - name: Terraform apply
         run: |
            terraform apply \
@@ -61,4 +57,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET }}
-          AWS_REGION: "eu-noth-1"
+          AWS_REGION: "eu-north-1"
