@@ -46,7 +46,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET }}
-          AWS_REGION: "eu-north-1"
+          AWS_REGION: "us-west-1"
                 
       - name: Terraform apply
         run: |
@@ -56,4 +56,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET }}
-          AWS_REGION: "eu-north-1"
+          AWS_REGION: "us-west-1"
