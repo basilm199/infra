@@ -14,12 +14,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET }}
-      AWS_REGION: ${{ secrets.DEV_REGION }}
-      packer_version: "1.9.4"
-
+    
     steps:
   
       - name: "Date"
@@ -38,7 +33,7 @@ jobs:
           terraform init \
             -backend-config="bucket=${{ secrets.DEV_S3 }}" \
             -backend-config="key=terraform.tfstate" \
-            -backend-config="region=${{ secrets.DEV_REGION }}" \
+            -backend-config="region=us-west-1" \
             -backend-config="access=${{ secrets.DEV_ACCESS }}" \
             -backend-config="secret=${{ secrets.DEV_SECRET }}" \
 
@@ -50,9 +45,17 @@ jobs:
 
       - name: "terraform plan"
         run: terraform plan -var-file=dev.tfvars
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET }}
+          AWS_REGION: "eu-noth-1"
 
       - name: "terraform apply"
         run: | 
           terraform apply \
             -var-file=dev.tfvars \
             -auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET }}
+          AWS_REGION: "eu-noth-1"
