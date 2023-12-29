@@ -33,7 +33,7 @@ jobs:
             -backend-config="key=terraform.tfstate" \
             -backend-config="region=us-west-1" \
             -backend-config="access_key=${{ secrets.DEV_ACCESS }}" \
-            -backend-config="secret_key=${{ secrets.DEV_SECRET }}" \ 
+            -backend-config="secret_key=${{ secrets.DEV_SECRET }}"
             
             
       - name: Terraform fmt
