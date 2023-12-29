@@ -1,0 +1,58 @@
+---
+name: "Development Infra"
+
+on:
+  repository_dispatch:
+    types: [ deployment-in-dev-env ]
+
+  push:
+    branches:
+      - devimage
+      - 'feature/**'
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET }}
+      AWS_REGION: ${{ secrets.DEV_REGION }}
+      packer_version: "1.9.4"
+
+    steps:
+  
+      - name: "Date"
+        run: date
+        
+      - name: "OS"
+        run : cat /etc/issue
+
+      - name: "terraform Installation"
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.2
+
+      - name: "Initialize terraform"
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ secrets.DEV_S3 }}" \
+            -backend-config="key=terraform.tfstate" \
+            -backend-config="region=${{ secrets.DEV_REGION }}" \
+            -backend-config="access=${{ secrets.DEV_ACCESS }}" \
+            -backend-config="secret=${{ secrets.DEV_SECRET }}" \
+
+      - name: "terraform fmt"
+        run: terraform fmt
+
+      - name: "terraform validate"
+        run: terraform validate
+
+      - name: "terraform plan"
+        run: terraform plan -var-file=dev.tfvars
+
+      - name: "terraform apply"
+        run: | 
+          terraform apply \
+            -var-file=dev.tfvars \
+            -auto-approve
