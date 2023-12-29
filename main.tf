@@ -63,7 +63,7 @@ resource "aws_instance" "RacingClub" {
   vpc_security_group_ids = [aws_security_group.allow_ports.id]
   key_name               = aws_key_pair.basil.key_name
   tags = {
-    Name        = "${var.project_name}-${var.project_env}-RacingClub"
+    Name        = "${var.project}-${var.env}-RacingClub"
     project     = var.project
     environment = var.env
   }
