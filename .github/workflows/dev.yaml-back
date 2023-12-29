@@ -9,57 +9,53 @@ on:
     branches:
       - developement
       - 'feature/**'
-    
+
 jobs:
-    
+
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
+  
+      - name: "Date"
+        run: date
+        
+      - name: "OS"
+        run : cat /etc/issue
 
-      - name: "Repository Checkout"
-        uses: actions/checkout@v3
-
-
-      - name: "Terraform Installation"
+      - name: "terraform Installation"
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.6.2
-     
-      - name: Terraform init
+
+      - name: "Initialize terraform"
         run: |
           terraform init \
             -backend-config="bucket=${{ secrets.DEV_S3 }}" \
             -backend-config="key=terraform.tfstate" \
             -backend-config="region=us-west-1" \
-            -backend-config="access_key=${{ secrets.DEV_ACCESS }}" \
-            -backend-config="secret_key=${{ secrets.DEV_SECRET }}" \ 
-            
-            
-      - name: Terraform fmt
+            -backend-config="access=${{ secrets.DEV_ACCESS }}" \
+            -backend-config="secret=${{ secrets.DEV_SECRET }}" \
+
+      - name: "terraform fmt"
         run: terraform fmt
 
-        
-          
-      - name: Terraform validate
+      - name: "terraform validate"
         run: terraform validate
 
-        
-
-      - name: Terraform plan
+      - name: "terraform plan"
         run: terraform plan -var-file=dev.tfvars
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET }}
-          AWS_REGION: "us-east-2"
-        
-        
-      - name: Terraform apply
-        run: |
-           terraform apply \
-              -auto-approve \
-              -var-file=dev.tfvars
+          AWS_REGION: "eu-north-1"
+
+      - name: "terraform apply"
+        run: | 
+          terraform apply \
+            -var-file=dev.tfvars \
+            -auto-approve
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET }}
-          AWS_REGION: "eu-noth-1"
+          AWS_REGION: "eu-north-1"
