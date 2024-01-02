@@ -60,7 +60,7 @@ resource "aws_security_group" "allow_ports1" {
 resource "aws_instance" "RacingClub" {
   ami                    = data.aws_ami.latest.id 
   instance_type          = var.instance_type
-  vpc_security_group_ids = [aws_security_group.allow_ports.id]
+  vpc_security_group_ids = [aws_security_group.allow_ports1.id]
   key_name               = aws_key_pair.basil1.key_name
   tags = {
     Name        = "${var.project}-${var.env}-RacingClub"
