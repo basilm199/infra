@@ -1,4 +1,4 @@
-resource "aws_key_pair" "basil" {
+resource "aws_key_pair" "basil1" {
   key_name   = "${var.project}-${var.env}"
   public_key = file("mykey.pub")
   tags = {
@@ -9,9 +9,9 @@ resource "aws_key_pair" "basil" {
 }
 
 
-resource "aws_security_group" "allow_ports" {
-  name        = "${var.project}-${var.env}-ssh-http-&-https-access"
-  description = "${var.project}-${var.env}-ssh-http-&-https-access"
+resource "aws_security_group" "allow_ports1" {
+  name        = "${var.project}-${var.env}-ssh-http-&-https-access1"
+  description = "${var.project}-${var.env}-ssh-http-&-https-access1"
 
   ingress {
     description      = "Secure Access"
@@ -50,7 +50,7 @@ resource "aws_security_group" "allow_ports" {
   }
 
   tags = {
-    Name        = "${var.project}-${var.env}-ssh-http-&-https-access"
+    Name        = "${var.project}-${var.env}-ssh-http-&-https-access1"
     project     = var.project
     environment = var.env
   }
@@ -61,7 +61,7 @@ resource "aws_instance" "RacingClub" {
   ami                    = data.aws_ami.latest.id 
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.allow_ports.id]
-  key_name               = aws_key_pair.basil.key_name
+  key_name               = aws_key_pair.basil1.key_name
   tags = {
     Name        = "${var.project}-${var.env}-RacingClub"
     project     = var.project
