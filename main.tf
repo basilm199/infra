@@ -2,7 +2,7 @@ resource "aws_key_pair" "basil1" {
   key_name   = "${var.project}-${var.env}"
   public_key = file("mykey.pub")
   tags = {
-    Name    = "${var.project}-${var.env}-key"
+    Name    = "${var.project}-${var.env}-key1"
     project = var.project
     env     = var.env
   }
